@@ -7,3 +7,20 @@ format:
 ---
 
 
+# Abstract
+
+The University of Michigan Health and Retirement Study is a longitudinal study surveying around 20,000 Americans to build a database for analyzing questions related to challenges and opportunities of aging. Many studies use this database to analyze the effects of different lifestyle practices on various measures of health (Lum and Lightfoot 2005, Kim et. al. 2021). Causal relationships can be difficult to identify when related to lifestyle practices and health benefits because of the difficulty of isolating variables and controlling for outcomes. Our research seeks to address this challenge by assessing existing work on the effects of volunteering on the health of aging populations including analysis on mental and physical health. We plan to improve on existing research by identifying gaps in causational analysis and potential methods for further assessment of causality between lifestyle practices and health outcomes, focusing on errors related to selection bias, lack of baseline controls, and limited models. 
+
+# Literature Review/Background
+
+
+
+# Missing Pieces
+
+
+
+# Course Topic to Fill the gap
+
+
+
+# Sources
