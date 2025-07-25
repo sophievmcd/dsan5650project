@@ -4,6 +4,7 @@ author: "Danielle Fischer and Sophie McDowall"
 format:
     html:
         embed-resources: true
+bibliography: references.bib
 ---
 
 
