@@ -10,18 +10,29 @@ bibliography: references.bib
 
 # Abstract
 
-The University of Michigan Health and Retirement Study is a longitudinal study surveying around 20,000 Americans to build a database for analyzing questions related to challenges and opportunities of aging. Many studies use this database to analyze the effects of different lifestyle practices on various measures of health (Lum and Lightfoot 2005, Kim et. al. 2021). Causal relationships can be difficult to identify when related to lifestyle practices and health benefits because of the difficulty of isolating variables and controlling for outcomes. Our research seeks to address this challenge by assessing existing work on the effects of volunteering on the health of aging populations including analysis on mental and physical health. We plan to improve on existing research by identifying gaps in causational analysis and potential methods for further assessment of causality between lifestyle practices and health outcomes, focusing on errors related to selection bias, lack of baseline controls, and limited models. 
+The University of Michigan Health and Retirement Study is a longitudinal study surveying around 20,000 Americans to build a database for analyzing questions related to challenges and opportunities of aging. Many studies use this database to analyze the effects of different lifestyle practices on various measures of health (@article Lum and Lightfoot 2005, Kim et. al. 2021). Causal relationships can be difficult to identify when related to lifestyle practices and health benefits because of the difficulty of isolating variables and controlling for outcomes. Our research seeks to address this challenge by assessing existing work on the effects of volunteering on the health of aging populations including analysis on mental and physical health. We plan to improve on existing research by identifying gaps in causational analysis and potential methods for further assessment of causality between lifestyle practices and health outcomes, focusing on errors related to selection bias, lack of baseline controls, and limited models. 
 
 # Literature Review/Background
 
+Many reports examine effects and correlations of social volunteering on the physical and mental health of older adults. 
+
+to add: details from specific studies
 
 
-# Missing Pieces
+# Missing Pieces (Causality)
 
+While many of these studies find that older adults who volunteer report better mental health and overall wellbeing in various health categories, the research is primarily correlational. There is a gap in research that moves from the correlational observations of consistent trends and identifies causational patterns between volunteering and various health benefits in old age. 
 
+While volunteering itself may cause better health for various reasons, it is necessary to consider many factors that may contribute to both health outcomes and likelihood to volunteer. For example, older adults who volunteer are likely already healthy enough to be mobile or independent, allowing them to volunteer. It is possible that older adults who are suffering from chronic or severe illness or health burdens are not as physically capable of volunteering, introducing a selection bias. Another factor to consider is socio-economic status. Wealthier adults may have more time to dedicate to volunteering, while also having the funds necessary to ease other burdens that can contribute to health problems. Social connection also could impact these results. Much of the literature cites the social benefit of volunteering as a potential contributing factor to improved health outcomes. 
 
 # Course Topic to Fill the gap
 
+In order to address this gap, our research aims to use propensity score weighting to achieve stronger results that move beyond correlation toward causation. 
+
+Potential areas to address: 
+- similar underlying health conditions: do people with similar chronic or burdensome health conditions demonstrate differences in these or other conditions when volunteering compared to others with the same conditions?
+- socio-economic status: does the outcome hold when balanced across socio-economic groups?
+- 
 
 
 # Sources
