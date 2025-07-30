@@ -1,0 +1,19 @@
+---
+title: "Loading HRS Data"
+author: "Sophie McDowall"
+format:
+    html:
+        embed-resources: true
+---
+
+## Loading in data
+Use: .dta files, which is in a standardized stata format, using pd.read_stata()
+
+Imports
+```{python}
+import pandas as pd
+
+data = pd.read_stata("../data/H20B_R.dta")
+
+
+```
