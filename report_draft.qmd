@@ -30,9 +30,25 @@ While volunteering itself may cause better health for various reasons, it is nec
 In order to address this gap, our research aims to use propensity score weighting to achieve stronger results that move beyond correlation toward causation. 
 
 Potential areas to address: 
-- similar underlying health conditions: do people with similar chronic or burdensome health conditions demonstrate differences in these or other conditions when volunteering compared to others with the same conditions?
+- similar underlying health conditions: do people with similar chronic or burdensome health conditions demonstrate differences in these or other conditions when volunteering compared to others with the same conditions? ex mobility 
 - socio-economic status: does the outcome hold when balanced across socio-economic groups?
-- 
+
+
+List of Covariates:
+- education (B)
+- age (V)
+- sex (V)
+- household income/wealth/socio-economic status (B)
+- employment status (J)
+- retirement (J3)
+- functional limitations (G)
+- health conditions (C)
+- born/arrived in US (B)
+- family structure (E)
+
+
+- volunteer work (G)
+
 
 
 # Sources

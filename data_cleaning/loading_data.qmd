@@ -9,6 +9,8 @@ format:
 ## Loading in data
 Use: .dta files, which is in a standardized stata format, using pd.read_stata()
 
+TO USE: Section G includes the volunteer data, SG086, SG195, SG196, ...
+
 Imports
 ```{python}
 import pandas as pd
