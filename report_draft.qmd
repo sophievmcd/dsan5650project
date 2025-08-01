@@ -11,6 +11,8 @@ bibliography: references.bib
 # Abstract
 
 The University of Michigan Health and Retirement Study is a longitudinal study surveying around 20,000 Americans to build a database for analyzing questions related to challenges and opportunities of aging. Many studies use this database to analyze the effects of different lifestyle practices on various measures of health (@article1, @article2). Causal relationships can be difficult to identify when related to lifestyle practices and health benefits because of the difficulty of isolating variables and controlling for outcomes. Our research seeks to address this challenge by assessing existing work on the effects of volunteering on the health of aging populations including analysis on mental and physical health. We plan to improve on existing research by identifying gaps in causational analysis and potential methods for further assessment of causality between lifestyle practices and health outcomes, focusing on errors related to selection bias, lack of baseline controls, and limited models. 
+Building on prior findings that link volunteering to reduced depression, slower decline in self-rated health, and lower mortality, we aim to evaluate whether these associations hold once important confounders are accounted for. Observational studies in this space are often limited by self-selection into volunteering, which creates systematic differences between groups that can bias results. By identifying and adjusting for these differences, we aim to clarify whether volunteering itself produces meaningful health benefits or if the associations reported in past research primarily reflect pre-existing advantages among volunteers. 
+Our project will use the extensive data in HRS to examine these relationships, focusing on outcomes such as mental health, physical functioning, and reported well being. We hope that by using an extensive set of covariates, we will be able to account for different factors and hidden influences that influence both volunteering and health outcomes. 
 
 # Literature Review/Background
 
@@ -33,14 +35,18 @@ While many of these studies find that older adults who volunteer report better m
 
 While volunteering itself may cause better health for various reasons, it is necessary to consider many factors that may contribute to both health outcomes and likelihood to volunteer. For example, older adults who volunteer are likely already healthy enough to be mobile or independent, allowing them to volunteer. It is possible that older adults who are suffering from chronic or severe illness or health burdens are not as physically capable of volunteering, introducing a selection bias. Another factor to consider is socio-economic status. Wealthier adults may have more time to dedicate to volunteering, while also having the funds necessary to ease other burdens that can contribute to health problems. Social connection also could impact these results. Much of the literature cites the social benefit of volunteering as a potential contributing factor to improved health outcomes. 
 
+Although a handful of studies have begun using propensity score matching to address selection bias, these approaches often remain limited. Many rely on a limited set of covariates or focus only on a narrow set of outcomes such as mortality or physical health biomarkers. We hope to build on these efforts by examining the results across several health outcomes and subgroups, allowing us to better understand the possible health benefits of volunteering in old age. 
+
 # Course Topic to Fill the gap
 
-In order to address this gap, our research aims to use propensity score weighting to achieve stronger results that move beyond correlation toward causation. 
+In order to address this gap, our research aims to use propensity score weighting to achieve stronger results that move beyond correlation toward causation. By leveraging this approach on longitudinal HRS data, we aim to better account for baseline differences between volunteers and non-volunteers and reduce bias caused by self-selection. We will also explore subgroup-specific effects to understand how benefits may vary across populations.
 
 Potential areas to address: 
+
 - similar underlying health conditions: do people with similar chronic or burdensome health conditions demonstrate differences in these or other conditions when volunteering compared to others with the same conditions? ex mobility 
 - socio-economic status: does the outcome hold when balanced across socio-economic groups?
-
+- intensity of volunteering: are effects stronger for individuals who volunteer more frequently compared to occassional volunteers, after controlling for confounders?
+- differences by age group: are causal effects different for different age ranges of older adults, after adjusting for covariates like functional limitations?
 
 ### Data Organization
 
