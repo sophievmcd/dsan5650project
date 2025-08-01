@@ -3096,16 +3096,238 @@ vertical-align: -.125em;
 
 <section id="abstract" class="level1">
 <h1>Abstract</h1>
-<p>The University of Michigan Health and Retirement Study is a longitudinal study surveying around 20,000 Americans to build a database for analyzing questions related to challenges and opportunities of aging. Many studies use this database to analyze the effects of different lifestyle practices on various measures of health (<span class="citation" data-cites="article">Lum and Lightfoot (<a href="#ref-article" role="doc-biblioref">2005</a>)</span> Lum and Lightfoot 2005, Kim et. al. 2021). Causal relationships can be difficult to identify when related to lifestyle practices and health benefits because of the difficulty of isolating variables and controlling for outcomes. Our research seeks to address this challenge by assessing existing work on the effects of volunteering on the health of aging populations including analysis on mental and physical health. We plan to improve on existing research by identifying gaps in causational analysis and potential methods for further assessment of causality between lifestyle practices and health outcomes, focusing on errors related to selection bias, lack of baseline controls, and limited models.</p>
+<p>The University of Michigan Health and Retirement Study is a longitudinal study surveying around 20,000 Americans to build a database for analyzing questions related to challenges and opportunities of aging. Many studies use this database to analyze the effects of different lifestyle practices on various measures of health (<span class="citation" data-cites="article1">Lum and Lightfoot (<a href="#ref-article1" role="doc-biblioref">2005</a>)</span>, <span class="citation" data-cites="article2">E. S. Kim et al. (<a href="#ref-article2" role="doc-biblioref">2020</a>)</span>). Causal relationships can be difficult to identify when related to lifestyle practices and health benefits because of the difficulty of isolating variables and controlling for outcomes. Our research seeks to address this challenge by assessing existing work on the effects of volunteering on the health of aging populations including analysis on mental and physical health. We plan to improve on existing research by identifying gaps in causational analysis and potential methods for further assessment of causality between lifestyle practices and health outcomes, focusing on errors related to selection bias, lack of baseline controls, and limited models.</p>
 </section>
 <section id="literature-reviewbackground" class="level1">
 <h1>Literature Review/Background</h1>
+<p>We use the Health and Retirement Study dataset for our analysis. The HRS (Health and Retirement Study) is sponsored by the National Institute on Aging (grant number NIA U01AG009740) and is conducted by the University of Michigan(<span class="citation" data-cites="articledataset">Michigan (<a href="#ref-articledataset" role="doc-biblioref">2022</a>)</span>). This dataset provides longitudinal data on around 20,000 Americans including data on health, mobility, demographic, values, and more. Numerous analytical studies use this data to identify correlations between different life practices and health outcomes, including many specifically looking at the impact of social volunteering on health for older adults. Many of these reports highlight correlations between social volunteering and physical and mental health.</p>
+<p><span class="citation" data-cites="article1">Lum and Lightfoot (<a href="#ref-article1" role="doc-biblioref">2005</a>)</span> used the dataset to examine whether volunteering 100+ hours per year is associated with better health outcomes for people over the age of 70. They found that volunteering is associated with a slower decline in self-reported health and functioning, lower rates of depression, and lower mortality rates. Their research mainly uses regression analysis to show a strong association, but lacks methods to account for potential self-selection.</p>
+<p><span class="citation" data-cites="article2">E. S. Kim et al. (<a href="#ref-article2" role="doc-biblioref">2020</a>)</span> used HRS data for adults over 50 to identify whether changes in volunteering is linked to changes in various health and wellbeing outcomes, finding links between volunteering more than 100 hours per year is linked with lower mortality. Their research controlled for many covariates, and used covariate adjustment in their regression.</p>
+<p><span class="citation" data-cites="article3">Lorenti, De Rose, and Racioppi (<a href="#ref-article3" role="doc-biblioref">2025</a>)</span> looks at connections between depression and volunteering, finding that volunteering reduces the probability of depression among early retirees, especially for women. The research considers co-variates including employment, partnership status, income, and health comorbidities.</p>
+<p><span class="citation" data-cites="article4">S. Kim, Halvorsen, and Han (<a href="#ref-article4" role="doc-biblioref">2023</a>)</span> assess direct association between volunteering and heart conditions, studying seven cardiovascular disease biomarkers. They found associations between volunteering 200+ hours a year and a lower risk for clinically high diastolic blood pressure, as well as an association between increased volunteering and lower likelihoods of blood pressure. They sought a more specific approach than studies that identify broad impacts. They used propensity score weighting (IPTW or inverse probablity of treatment weighting) to adjust their selection into volunteering based on factors related to age, gender, race, Hispanic ethnicity, education, employment status, health, depressive symptoms, marital status, informal volunteering, wealth, and income. This is a good example of an exhaustive selection of attributes to account for in potential pre-selection.</p>
+<p>Many of these studies do a good job of addressing various potential co-variates through the use of propensity scores and other methods. Some do not use the most effective approaches to control such variables and therefore cannot identify strong causal relationships beyond correlations.</p>
 </section>
-<section id="missing-pieces" class="level1">
-<h1>Missing Pieces</h1>
+<section id="missing-pieces-causality" class="level1">
+<h1>Missing Pieces (Causality)</h1>
+<p>While many of these studies find that older adults who volunteer report better mental health and overall wellbeing in various health categories, the research is primarily correlational. Some studies do identify and account for potential co-variates, but there is still a space for greater research that moves from the correlational observations of consistent trends and identifies causational patterns between volunteering and various health benefits in old age.</p>
+<p>While volunteering itself may cause better health for various reasons, it is necessary to consider many factors that may contribute to both health outcomes and likelihood to volunteer. For example, older adults who volunteer are likely already healthy enough to be mobile or independent, allowing them to volunteer. It is possible that older adults who are suffering from chronic or severe illness or health burdens are not as physically capable of volunteering, introducing a selection bias. Another factor to consider is socio-economic status. Wealthier adults may have more time to dedicate to volunteering, while also having the funds necessary to ease other burdens that can contribute to health problems. Social connection also could impact these results. Much of the literature cites the social benefit of volunteering as a potential contributing factor to improved health outcomes.</p>
 </section>
 <section id="course-topic-to-fill-the-gap" class="level1">
 <h1>Course Topic to Fill the gap</h1>
+<p>In order to address this gap, our research aims to use propensity score weighting to achieve stronger results that move beyond correlation toward causation.</p>
+<p>Potential areas to address: - similar underlying health conditions: do people with similar chronic or burdensome health conditions demonstrate differences in these or other conditions when volunteering compared to others with the same conditions? ex mobility - socio-economic status: does the outcome hold when balanced across socio-economic groups?</p>
+<section id="data-organization" class="level3">
+<h3 class="anchored" data-anchor-id="data-organization">Data Organization</h3>
+<p>The HRS data contains tens of thousands of data points on a wide range of areas related to values, personal history, family status, health, mobility, and more in alphabetically labeled groups. The tables below lists covariates that we account for, the corresponding dataset from the survey, and some variables that fit into the category.</p>
+<section id="covariates-and-data-source" class="level4">
+<h4 class="anchored" data-anchor-id="covariates-and-data-source">Covariates and Data Source</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Covariate</th>
+<th>HRS Dataset Label</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>age</td>
+<td>V</td>
+</tr>
+<tr class="even">
+<td>sex</td>
+<td>V</td>
+</tr>
+<tr class="odd">
+<td>household income/wealth/socio-economic status</td>
+<td>B</td>
+</tr>
+<tr class="even">
+<td>employment status</td>
+<td>J</td>
+</tr>
+<tr class="odd">
+<td>retirement</td>
+<td>J3</td>
+</tr>
+<tr class="even">
+<td>functional limitations (mobility)</td>
+<td>G</td>
+</tr>
+<tr class="odd">
+<td>health conditions</td>
+<td>C</td>
+</tr>
+<tr class="even">
+<td>born/arrived in US</td>
+<td>B</td>
+</tr>
+<tr class="odd">
+<td>volunteer work</td>
+<td>G</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sample-of-factorsdata-attributes" class="level4">
+<h4 class="anchored" data-anchor-id="sample-of-factorsdata-attributes">Sample of Factors/Data Attributes:</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 32%">
+<col style="width: 22%">
+<col style="width: 22%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>B</th>
+<th>C</th>
+<th>J</th>
+<th>J3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>SB000 LIFE SATISFACTION</td>
+<td>SC001 RATE HEALTH</td>
+<td>SJ005M1 CURRENT JOB STATUS- 1</td>
+<td>SJ3568 PLAN TO STOP WORKING-AGE</td>
+</tr>
+<tr class="even">
+<td>SB002 BORN IN US</td>
+<td>SC018 CANCER OF ANY KIND EXCLUDING SKIN</td>
+<td>SJ963 WORKED FOR PAY IN LAST 12 MONTHS</td>
+<td>SJ3569 PLAN TO STOP WORKING-YR</td>
+</tr>
+<tr class="odd">
+<td>SB014 R HIGHEST LEVEL OF EDUCATION</td>
+<td>SC036 HEART CONDITION</td>
+<td>SJ032 AMOUNT OF SALARY</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>SB138 LANGUAGE SPOKEN AT HOME</td>
+<td>SC053 STROKE</td>
+<td>SJ547 A LOT OF STRESS</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>SB091M R RACE - PRIMARY - MASKED</td>
+<td>SC271 EVER HAD DEPRESSION</td>
+<td>SJ552 ENJOY GOING TO WORK</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>SB135 SEXUAL ORIENTATION</td>
+<td>SC272 EVER HAD ALZHEIMERS</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>SB035 R SERVED IN MILITARY</td>
+<td>SC273 EVER HAD DEMENTIA</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>SB050 R RELIGIOUS PREFERENCE</td>
+<td>SC070 ARTHRITIS</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>SB082 HOW OFTEN ATTEND RELIGIOUS SERV</td>
+<td>SC297 WEAK IMMUNE SYSTEM</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>SB065 NUMBER OF MARRIAGES</td>
+<td>SC283 HIGH CHOLESTEROL</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>SC095 RATE EYESIGHT</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>SC103 RATE HEARING</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>SC291 TOLD BY HEALTH PROFESSIONAL HAVE SLEEP DISORDER</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>SC104 TROUBLED WITH PAIN</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>SC105 DEGREE PAIN MOST OF TIME</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>SC106 DOES PAIN LIMIT ACTIVITIES</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>SC223 HOW OFTEN VIGOROUS ACTIVITY</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>SC224 HOW OFTEN MODERATE ACTIVITY</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>SC225 HOW OFTEN MILD ACTIVITY</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>SC116 EVER SMOKE</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>SC117 SMOKE CIGARETTES NOW</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>SC139 WEIGHT IN POUNDS</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>SC150 FELT DEPRESSED IN PAST YR</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
 </section>
 <section id="sources" class="level1 unnumbered">
 
@@ -3113,8 +3335,20 @@ vertical-align: -.125em;
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Sources</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-article" class="csl-entry" role="listitem">
+<div id="ref-article2" class="csl-entry" role="listitem">
+Kim, Erica S, Ashley V Whillans, Matthew T Lee, Ying Chen, and Tyler J VanderWeele. 2020. <span>“Volunteering and Subsequent Health and Well-Being in Older Adults: An Outcome-Wide Longitudinal Approach.”</span> <em>American Journal of Preventive Medicine</em> 59(2) (August): 176–86. <a href="https://doi.org/10.1016/j.amepre.2020.03.004">https://doi.org/10.1016/j.amepre.2020.03.004</a>.
+</div>
+<div id="ref-article4" class="csl-entry" role="listitem">
+Kim, Seoyoun, Cal Halvorsen, and Sae Hwang Han. 2023. <span>“Volunteering and Changes in Cardiovascular Biomarkers: Longitudinal Evidence from the Health and Retirement Study.”</span> <em>Innovation in Aging</em> 7(5). <a href="https://doi.org/10.1016/j.socscimed.2025.117790.">https://doi.org/10.1016/j.socscimed.2025.117790.</a>
+</div>
+<div id="ref-article3" class="csl-entry" role="listitem">
+Lorenti, Angelo, Alessandra De Rose, and Filomena Racioppi. 2025. <span>“Volunteering During Early Retirement Reduces Depression.”</span> <em>Social Science &amp; Medicine</em> 367. <a href="https://doi.org/10.1016/j.socscimed.2025.117790.">https://doi.org/10.1016/j.socscimed.2025.117790.</a>
+</div>
+<div id="ref-article1" class="csl-entry" role="listitem">
 Lum, Terry Y, and Elizabeth Lightfoot. 2005. <span>“Effects of Volunteering on the Physical and Mental Health of Older People.”</span> <em>Research on Aging</em> 27 (January): 31–55. <a href="https://doi.org/10.1177/0164027504271349">https://doi.org/10.1177/0164027504271349</a>.
+</div>
+<div id="ref-articledataset" class="csl-entry" role="listitem">
+Michigan, University of. 2022. <span>“Health and Retirement Study Public Use Dataset.”</span> <a href="https://hrsdata.isr.umich.edu/data-products/">https://hrsdata.isr.umich.edu/data-products/</a>.
 </div>
 </div></section></div></main>
 <!-- /main column -->
