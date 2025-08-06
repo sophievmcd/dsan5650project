@@ -52,51 +52,44 @@ Potential areas to address:
 
 The HRS data contains tens of thousands of data points on a wide range of areas related to values, personal history, family status, health, mobility, and more in alphabetically labeled groups. The tables below lists covariates that we account for, the corresponding dataset from the survey, and some variables that fit into the category.
 
-#### Covariates and Data Source
+### Methodology
 
-| Covariate  | HRS Dataset Label|
-|------------|--------------|
-| age | V |
-| sex | V |
-| household income/wealth/socio-economic status | B |
-| employment status | J |
-| retirement | J3 |
-| functional limitations (mobility) | G |
-| health conditions | C |
-| born/arrived in US | B |
-| volunteer work | G |
+We used the HRS datasets for the years 2020 and 2022. From these data sets, we pulled variables for our targets, predictors, and covariates for propensity scoring. We chose three variables to represent target categories related to physical health, mental health, and overall life satisfaction, two variables representing predictors of volunteering, and 18 variables on a variety of themes to include in the propensity scores. Each of these are listed below. 
 
+Propensity Score Based on:
+- wealth/socio-economic: none
+- age: RA019
+- sex: none
+- race: SBO91M
+- employment status: current job status (SJ005M1)
+- education level: highest level of education (SB014)
+- physical: weight (SC139), heart condition (SC036), pain limits activities (SC106), ever had depression (SC271), arthritis (SC070), weak immune system (SC297), alzheimers (SC272)
+- mobility: ability to drive (SG037), difficulty hearing (SV401), difficulty seeing (SV402), difficulty walking (SV404)
+- social: relationship with others (SV215)
+- memory rating: rd101
 
+|**Variable**| Category | Dataset Label | Description |
+|------------|----------|---------------|-------------|
+|physical health|Target|SC001|from 2022; self-assessed physical health rating on a scale of 1-10|
+|mental health |Target|SC150|from 2022; the last 12 months have you felt depressed for more than 2 weeks at a time|
+|life satisfaction|Target|SB000|from 2022; self-assessed current life satisfaction rating|
+|volunteered (general)|Predictor|SG086|from 2022; volunteered in past 12 months|
+|volunteered (hours)|Predictor|SG195-197|from 2022; below/around/over 100 hours|
+|age|Covariate|RA019|age in years|
+|race|Covariate|SB091M|primary race|
+|employment|Covariate|SJ005M1|current job status, employed vs. unemployed|
+|education|Covariate|SB014|highest level of education received|
+|physical: weight|Covariate|SC139|weight|
+|physical: heart condition|Covariate|SC036|yes/no has had heart condition|
+|physical: pain|Covariate|SC106|pain limits activities|
+|physical: depression history|Covariate|SC271|ever had depression|
+|physical: arthritis|Covariate|SC070|arthritis|
+|physical: weak immune system|Covariate|SC297|weak immune system|
+|physical: alzheimers|Covariate|SC272|ever had alzheimers|
+|physical: hearing|Covariate|SV401|difficulty hearing|
+|physical: seeing|Covariate|SV402|difficulty seeing|
+|physical: memory|Covariate|RD101|self assessed memory level|
+|mobility: driving|Covariate|SG037|ability to drive|
+|mobility: walking|Covariate|SV404|difficulty walking|
+|social: relationships|Covariate|SV215|relationships with others|
 
-#### Sample of Factors/Data Attributes:
-
-
-| B                                      | C                                                        | J                                      | J3                                    |
-|----------------------------------------|-----------------------------------------------------------|----------------------------------------|----------------------------------------|
-| SB000 LIFE SATISFACTION                | SC001 RATE HEALTH                                         | SJ005M1 CURRENT JOB STATUS- 1          | SJ3568 PLAN TO STOP WORKING-AGE        |
-| SB002 BORN IN US                       | SC018 CANCER OF ANY KIND EXCLUDING SKIN                   | SJ963 WORKED FOR PAY IN LAST 12 MONTHS | SJ3569 PLAN TO STOP WORKING-YR         |
-| SB014 R HIGHEST LEVEL OF EDUCATION     | SC036 HEART CONDITION                                     | SJ032 AMOUNT OF SALARY                 |                                        |
-| SB138 LANGUAGE SPOKEN AT HOME          | SC053 STROKE                                              | SJ547 A LOT OF STRESS                  |                                        |
-| SB091M R RACE - PRIMARY - MASKED       | SC271 EVER HAD DEPRESSION                                 | SJ552 ENJOY GOING TO WORK              |                                        |
-| SB135 SEXUAL ORIENTATION               | SC272 EVER HAD ALZHEIMERS                                 |                                        |                                        |
-| SB035 R SERVED IN MILITARY             | SC273 EVER HAD DEMENTIA                                   |                                        |                                        |
-| SB050 R RELIGIOUS PREFERENCE           | SC070 ARTHRITIS                                           |                                        |                                        |
-| SB082 HOW OFTEN ATTEND RELIGIOUS SERV  | SC297 WEAK IMMUNE SYSTEM                                  |                                        |                                        |
-| SB065 NUMBER OF MARRIAGES              | SC283 HIGH CHOLESTEROL                                    |                                        |                                        |
-|                                        | SC095 RATE EYESIGHT                                       |                                        |                                        |
-|                                        | SC103 RATE HEARING                                        |                                        |                                        |
-|                                        | SC291 TOLD BY HEALTH PROFESSIONAL HAVE SLEEP DISORDER     |                                        |                                        |
-|                                        | SC104 TROUBLED WITH PAIN                                  |                                        |                                        |
-|                                        | SC105 DEGREE PAIN MOST OF TIME                            |                                        |                                        |
-|                                        | SC106 DOES PAIN LIMIT ACTIVITIES                          |                                        |                                        |
-|                                        | SC223 HOW OFTEN VIGOROUS ACTIVITY                         |                                        |                                        |
-|                                        | SC224 HOW OFTEN MODERATE ACTIVITY                         |                                        |                                        |
-|                                        | SC225 HOW OFTEN MILD ACTIVITY                             |                                        |                                        |
-|                                        | SC116 EVER SMOKE                                          |                                        |                                        |
-|                                        | SC117 SMOKE CIGARETTES NOW                                |                                        |                                        |
-|                                        | SC139 WEIGHT IN POUNDS                                    |                                        |                                        |
-|                                        | SC150 FELT DEPRESSED IN PAST YR                           |                                        |                                        |
-
-
-
-# Sources

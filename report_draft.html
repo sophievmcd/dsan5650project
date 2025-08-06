@@ -3126,222 +3126,166 @@ vertical-align: -.125em;
 <section id="data-organization" class="level3">
 <h3 class="anchored" data-anchor-id="data-organization">Data Organization</h3>
 <p>The HRS data contains tens of thousands of data points on a wide range of areas related to values, personal history, family status, health, mobility, and more in alphabetically labeled groups. The tables below lists covariates that we account for, the corresponding dataset from the survey, and some variables that fit into the category.</p>
-<section id="covariates-and-data-source" class="level4">
-<h4 class="anchored" data-anchor-id="covariates-and-data-source">Covariates and Data Source</h4>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Covariate</th>
-<th>HRS Dataset Label</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>age</td>
-<td>V</td>
-</tr>
-<tr class="even">
-<td>sex</td>
-<td>V</td>
-</tr>
-<tr class="odd">
-<td>household income/wealth/socio-economic status</td>
-<td>B</td>
-</tr>
-<tr class="even">
-<td>employment status</td>
-<td>J</td>
-</tr>
-<tr class="odd">
-<td>retirement</td>
-<td>J3</td>
-</tr>
-<tr class="even">
-<td>functional limitations (mobility)</td>
-<td>G</td>
-</tr>
-<tr class="odd">
-<td>health conditions</td>
-<td>C</td>
-</tr>
-<tr class="even">
-<td>born/arrived in US</td>
-<td>B</td>
-</tr>
-<tr class="odd">
-<td>volunteer work</td>
-<td>G</td>
-</tr>
-</tbody>
-</table>
 </section>
-<section id="sample-of-factorsdata-attributes" class="level4">
-<h4 class="anchored" data-anchor-id="sample-of-factorsdata-attributes">Sample of Factors/Data Attributes:</h4>
+<section id="methodology" class="level3">
+<h3 class="anchored" data-anchor-id="methodology">Methodology</h3>
+<p>We used the HRS datasets for the years 2020 and 2022. From these data sets, we pulled variables for our targets, predictors, and covariates for propensity scoring. We chose three variables to represent target categories related to physical health, mental health, and overall life satisfaction, two variables representing predictors of volunteering, and 18 variables on a variety of themes to include in the propensity scores. Each of these are listed below.</p>
+<p>Propensity Score Based on: - wealth/socio-economic: none - age: RA019 - sex: none - race: SBO91M - employment status: current job status (SJ005M1) - education level: highest level of education (SB014) - physical: weight (SC139), heart condition (SC036), pain limits activities (SC106), ever had depression (SC271), arthritis (SC070), weak immune system (SC297), alzheimers (SC272) - mobility: ability to drive (SG037), difficulty hearing (SV401), difficulty seeing (SV402), difficulty walking (SV404) - social: relationship with others (SV215) - memory rating: rd101</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 22%">
-<col style="width: 32%">
-<col style="width: 22%">
-<col style="width: 22%">
+<col style="width: 24%">
+<col style="width: 20%">
+<col style="width: 30%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>B</th>
-<th>C</th>
-<th>J</th>
-<th>J3</th>
+<th><strong>Variable</strong></th>
+<th>Category</th>
+<th>Dataset Label</th>
+<th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>SB000 LIFE SATISFACTION</td>
-<td>SC001 RATE HEALTH</td>
-<td>SJ005M1 CURRENT JOB STATUS- 1</td>
-<td>SJ3568 PLAN TO STOP WORKING-AGE</td>
+<td>physical health</td>
+<td>Target</td>
+<td>SC001</td>
+<td>from 2022; self-assessed physical health rating on a scale of 1-10</td>
 </tr>
 <tr class="even">
-<td>SB002 BORN IN US</td>
-<td>SC018 CANCER OF ANY KIND EXCLUDING SKIN</td>
-<td>SJ963 WORKED FOR PAY IN LAST 12 MONTHS</td>
-<td>SJ3569 PLAN TO STOP WORKING-YR</td>
+<td>mental health</td>
+<td>Target</td>
+<td>SC150</td>
+<td>from 2022; the last 12 months have you felt depressed for more than 2 weeks at a time</td>
 </tr>
 <tr class="odd">
-<td>SB014 R HIGHEST LEVEL OF EDUCATION</td>
-<td>SC036 HEART CONDITION</td>
-<td>SJ032 AMOUNT OF SALARY</td>
-<td></td>
+<td>life satisfaction</td>
+<td>Target</td>
+<td>SB000</td>
+<td>from 2022; self-assessed current life satisfaction rating</td>
 </tr>
 <tr class="even">
-<td>SB138 LANGUAGE SPOKEN AT HOME</td>
-<td>SC053 STROKE</td>
-<td>SJ547 A LOT OF STRESS</td>
-<td></td>
+<td>volunteered (general)</td>
+<td>Predictor</td>
+<td>SG086</td>
+<td>from 2022; volunteered in past 12 months</td>
 </tr>
 <tr class="odd">
-<td>SB091M R RACE - PRIMARY - MASKED</td>
-<td>SC271 EVER HAD DEPRESSION</td>
-<td>SJ552 ENJOY GOING TO WORK</td>
-<td></td>
+<td>volunteered (hours)</td>
+<td>Predictor</td>
+<td>SG195-197</td>
+<td>from 2022; below/around/over 100 hours</td>
 </tr>
 <tr class="even">
-<td>SB135 SEXUAL ORIENTATION</td>
-<td>SC272 EVER HAD ALZHEIMERS</td>
-<td></td>
-<td></td>
+<td>age</td>
+<td>Covariate</td>
+<td>RA019</td>
+<td>age in years</td>
 </tr>
 <tr class="odd">
-<td>SB035 R SERVED IN MILITARY</td>
-<td>SC273 EVER HAD DEMENTIA</td>
-<td></td>
-<td></td>
+<td>race</td>
+<td>Covariate</td>
+<td>SB091M</td>
+<td>primary race</td>
 </tr>
 <tr class="even">
-<td>SB050 R RELIGIOUS PREFERENCE</td>
-<td>SC070 ARTHRITIS</td>
-<td></td>
-<td></td>
+<td>employment</td>
+<td>Covariate</td>
+<td>SJ005M1</td>
+<td>current job status, employed vs. unemployed</td>
 </tr>
 <tr class="odd">
-<td>SB082 HOW OFTEN ATTEND RELIGIOUS SERV</td>
-<td>SC297 WEAK IMMUNE SYSTEM</td>
-<td></td>
-<td></td>
+<td>education</td>
+<td>Covariate</td>
+<td>SB014</td>
+<td>highest level of education received</td>
 </tr>
 <tr class="even">
-<td>SB065 NUMBER OF MARRIAGES</td>
-<td>SC283 HIGH CHOLESTEROL</td>
-<td></td>
-<td></td>
+<td>physical: weight</td>
+<td>Covariate</td>
+<td>SC139</td>
+<td>weight</td>
 </tr>
 <tr class="odd">
-<td></td>
-<td>SC095 RATE EYESIGHT</td>
-<td></td>
-<td></td>
+<td>physical: heart condition</td>
+<td>Covariate</td>
+<td>SC036</td>
+<td>yes/no has had heart condition</td>
 </tr>
 <tr class="even">
-<td></td>
-<td>SC103 RATE HEARING</td>
-<td></td>
-<td></td>
+<td>physical: pain</td>
+<td>Covariate</td>
+<td>SC106</td>
+<td>pain limits activities</td>
 </tr>
 <tr class="odd">
-<td></td>
-<td>SC291 TOLD BY HEALTH PROFESSIONAL HAVE SLEEP DISORDER</td>
-<td></td>
-<td></td>
+<td>physical: depression history</td>
+<td>Covariate</td>
+<td>SC271</td>
+<td>ever had depression</td>
 </tr>
 <tr class="even">
-<td></td>
-<td>SC104 TROUBLED WITH PAIN</td>
-<td></td>
-<td></td>
+<td>physical: arthritis</td>
+<td>Covariate</td>
+<td>SC070</td>
+<td>arthritis</td>
 </tr>
 <tr class="odd">
-<td></td>
-<td>SC105 DEGREE PAIN MOST OF TIME</td>
-<td></td>
-<td></td>
+<td>physical: weak immune system</td>
+<td>Covariate</td>
+<td>SC297</td>
+<td>weak immune system</td>
 </tr>
 <tr class="even">
-<td></td>
-<td>SC106 DOES PAIN LIMIT ACTIVITIES</td>
-<td></td>
-<td></td>
+<td>physical: alzheimers</td>
+<td>Covariate</td>
+<td>SC272</td>
+<td>ever had alzheimers</td>
 </tr>
 <tr class="odd">
-<td></td>
-<td>SC223 HOW OFTEN VIGOROUS ACTIVITY</td>
-<td></td>
-<td></td>
+<td>physical: hearing</td>
+<td>Covariate</td>
+<td>SV401</td>
+<td>difficulty hearing</td>
 </tr>
 <tr class="even">
-<td></td>
-<td>SC224 HOW OFTEN MODERATE ACTIVITY</td>
-<td></td>
-<td></td>
+<td>physical: seeing</td>
+<td>Covariate</td>
+<td>SV402</td>
+<td>difficulty seeing</td>
 </tr>
 <tr class="odd">
-<td></td>
-<td>SC225 HOW OFTEN MILD ACTIVITY</td>
-<td></td>
-<td></td>
+<td>physical: memory</td>
+<td>Covariate</td>
+<td>RD101</td>
+<td>self assessed memory level</td>
 </tr>
 <tr class="even">
-<td></td>
-<td>SC116 EVER SMOKE</td>
-<td></td>
-<td></td>
+<td>mobility: driving</td>
+<td>Covariate</td>
+<td>SG037</td>
+<td>ability to drive</td>
 </tr>
 <tr class="odd">
-<td></td>
-<td>SC117 SMOKE CIGARETTES NOW</td>
-<td></td>
-<td></td>
+<td>mobility: walking</td>
+<td>Covariate</td>
+<td>SV404</td>
+<td>difficulty walking</td>
 </tr>
 <tr class="even">
-<td></td>
-<td>SC139 WEIGHT IN POUNDS</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td></td>
-<td>SC150 FELT DEPRESSED IN PAST YR</td>
-<td></td>
-<td></td>
+<td>social: relationships</td>
+<td>Covariate</td>
+<td>SV215</td>
+<td>relationships with others</td>
 </tr>
 </tbody>
 </table>
-</section>
-</section>
-</section>
-<section id="sources" class="level1 unnumbered">
-
 
 </section>
+</section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Sources</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-article2" class="csl-entry" role="listitem">
 Kim, Erica S, Ashley V Whillans, Matthew T Lee, Ying Chen, and Tyler J VanderWeele. 2020. <span>“Volunteering and Subsequent Health and Well-Being in Older Adults: An Outcome-Wide Longitudinal Approach.”</span> <em>American Journal of Preventive Medicine</em> 59(2) (August): 176–86. <a href="https://doi.org/10.1016/j.amepre.2020.03.004">https://doi.org/10.1016/j.amepre.2020.03.004</a>.
 </div>

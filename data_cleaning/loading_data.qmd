@@ -11,6 +11,46 @@ Use: .dta files, which is in a standardized stata format, using pd.read_stata()
 
 TO USE: Section G includes the volunteer data, SG086, SG195, SG196, ...
 
+#### Covariates and Data Source
+
+| Covariate  | HRS Dataset Label|
+|------------|--------------|
+| age | V |
+| sex | V |
+| household income/wealth/socio-economic status | B |
+| employment status | J |
+| retirement | J3 |
+| functional limitations (mobility) | G |
+| health conditions | C |
+| born/arrived in US | B |
+| volunteer work | G |
+
+
+From 2020 and 2022 Data:
+Pull each of the below variables, including targets, predictors, and co-variates for propensity scores.
+
+Target Variables: 
+- physical health: self rated health in 2022 (SC001)
+- mental health: in the last 12 months have you felt depressed for two weeks (SC150)
+- life satisfaction (SB000)
+
+Main Predictors: 
+- volunteered in past 12 months (SG086)
+- volunteered 0 hours(SG195) - 196, 197 are 200 and 50
+
+Propensity Score Based on:
+- wealth/socio-economic: 
+- age:
+- sex: 
+- race: SBO91M
+- employment status: current job status (SJ005M1)
+- education level: highest level of education (SB014)
+- physical: weight (SC139), heart condition (SC036), pain limits activities (SC106), ever had depression (SC271), arthritis (SC070), weak immune system (SC297), alzheimers (SC272)
+- mobility: ability to drive (SG037), difficulty hearing (SV401), difficulty seeing (SV402), difficulty walking (SV404)
+- social: relationship with others (SV215)
+
+
+
 Imports
 ```{python}
 import pandas as pd
