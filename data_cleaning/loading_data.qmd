@@ -160,9 +160,12 @@ merged_df['RV404'] = merged_df['RV404'].replace({8: np.nan, 9: np.nan})
 print(merged_df['RV404'].value_counts(dropna=False))
 
 
+```
 
+Export to csv
+```{python}
 
-
+merged_df.to_csv("../clean_data/covariates_2020_final.csv", index=False)
 
 
 ```
