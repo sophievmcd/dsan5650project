@@ -6,10 +6,12 @@ format:
         embed-resources: true
 ---
 
-## Loading in data
+## Loading in 2020 data
 Use: .dta files, which is in a standardized stata format, using pd.read_stata()
 
 TO USE: Section G includes the volunteer data, SG086, SG195, SG196, ...
+
+Using 2020 Data for all covariates
 
 #### Covariates and Data Source
 
@@ -54,8 +56,114 @@ Propensity Score Based on:
 Imports
 ```{python}
 import pandas as pd
+import numpy as np
 
-data = pd.read_stata("../data/H20B_R.dta")
+#load in data
+data_h20b = pd.read_stata("../data/H20B_R.dta")
+data_h20c = pd.read_stata("../data/H20C_R.dta")
+data_h20G = pd.read_stata("../data/H20G_R.dta")
+data_h20J = pd.read_stata("../data/H20J_R.dta")
+data_h20V = pd.read_stata("../data/H20V_R.dta")
+
+```
+
+
+### Variable Selection
+- race: SBO91M
+- employment status: current job status (SJ005M1)
+- education level: highest level of education (SB014)
+- physical: weight (SC139), heart condition (SC036), pain limits activities (SC106), ever had depression (SC271), arthritis (SC070), weak immune system (SC297), alzheimers (SC272)
+- mobility: ability to drive (SG037), difficulty hearing (SV401), difficulty seeing (SV402), difficulty walking (SV404)
+
+```{python}
+# select for variables from each; keep hhid and pn 
+
+# B: SB091M, SB014
+b_df = data_h20b[["HHID", "PN", "RB091M", "RB014"]]
+
+# C: SC139, SC036, SC106, SC271, SC070, SC297, SC272
+c_df = data_h20c[["HHID", "PN", "RC036", "RC106", "RC271", "RC070", "RC272"]] # "RC297" excluded for now
+
+# G: SG037
+g_df = data_h20G[["HHID", "PN", "RG037"]] 
+
+# J: SJ005M1
+j_df = data_h20J[["HHID", "PN", "RJ005M1"]] 
+
+# V: SV401, SV402, SV404, SV215
+v_df = data_h20V[["HHID", "PN", "RV402", "RV404", "RV401"]] 
+
+```
+
+Merge based on pn 
+
+```{python}
+merged_df = b_df.merge(c_df, on=["HHID", "PN"], how="outer") \
+                .merge(g_df, on=["HHID", "PN"], how="outer") \
+                .merge(j_df, on=["HHID", "PN"], how="outer") \
+                .merge(v_df, on=["HHID", "PN"], how="outer")
 
 
 ```
+
+
+### Cleaning Data Formatting
+
+```{python}
+
+# Replace values in RB091M column
+merged_df['RB091M'] = merged_df['RB091M'].replace({8:3, 98: np.nan, 99: np.nan, 97: 4}) #1: white, 2: black, 3: can't choose/all same, 4:other
+print(merged_df['RB091M'].value_counts(dropna=False))
+
+# Replace values in RB014 column
+merged_df['RB014'] = merged_df['RB014'].replace({97: np.nan, 98: np.nan, 99: np.nan})
+print(merged_df['RB014'].value_counts(dropna=False))
+
+# Replace values in RC036 column
+merged_df['RC036'] = merged_df['RC036'].replace({-8: np.nan, 1: 1, 6: 1, 4: 2, 5: 2, 8: np.nan, 9: np.nan}) #1=YES has ever had, 2=NO Never had
+print(merged_df['RC036'].value_counts(dropna=False))
+
+# Replace values in RC106 column
+merged_df['RC106'] = merged_df['RC106'].replace({-8: np.nan, 1: 1, 5: 2, 8: np.nan, 9: np.nan})
+print(merged_df['RC106'].value_counts(dropna=False))
+
+# Replace values in RC271 column
+merged_df['RC271'] = merged_df['RC271'].replace({-8: np.nan, 1: 1, 4:2, 5: 2, 6:1, 8: np.nan, 9: np.nan})#1=YES has ever had, 2=NO Never had
+print(merged_df['RC271'].value_counts(dropna=False))
+
+# Replace values in RC070 column
+merged_df['RC070'] = merged_df['RC070'].replace({-8: np.nan, 1: 1, 4:2, 5: 2, 6:1, 8: np.nan, 9: np.nan})#1=YES has ever had, 2=NO Never had
+print(merged_df['RC070'].value_counts(dropna=False))
+
+# Replace values in RC272 column
+merged_df['RC272'] = merged_df['RC272'].replace({-8: np.nan, 1: 1, 4:2, 5: 2, 8: np.nan, 9: np.nan})#1=YES has ever had, 2=NO Never had
+print(merged_df['RC272'].value_counts(dropna=False))
+
+# Replace values in RG037 column
+merged_df['RG037'] = merged_df['RG037'].replace({5:2, 6:2, 8: np.nan, 9: np.nan})#1=YES , 2=NO 
+print(merged_df['RG037'].value_counts(dropna=False))
+
+# Replace values in RJ005M1 column
+merged_df['RJ005M1'] = merged_df['RJ005M1'].replace({98: np.nan, 99: np.nan})
+print(merged_df['RJ005M1'].value_counts(dropna=False))
+
+# Replace values in RV402 column
+merged_df['RV402'] = merged_df['RV402'].replace({8: np.nan, 9: np.nan})
+print(merged_df['RV402'].value_counts(dropna=False))
+
+# Replace values in RV401 column
+merged_df['RV401'] = merged_df['RV401'].replace({8: np.nan, 9: np.nan})
+print(merged_df['RV401'].value_counts(dropna=False))
+
+# Replace values in RV404 column
+merged_df['RV404'] = merged_df['RV404'].replace({8: np.nan, 9: np.nan})
+print(merged_df['RV404'].value_counts(dropna=False))
+
+
+
+
+
+
+
+```
+
