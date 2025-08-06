@@ -1,0 +1,153 @@
+---
+title: "data-loading"
+format: html
+---
+
+```{r installing-packages}
+install.packages("haven")
+install.packages("dplyr")
+```
+
+```{r loading-files}
+library(haven)
+library(dplyr)
+```
+
+
+2022
+- volunteering stuff
+G file
+B file
+C file
+
+```{r 2022-data}
+
+df_B <- read_dta("raw_data/h22sta/H22B_R.dta")
+df_C <- read_dta("raw_data/h22sta/H22C_R.dta")
+df_G <- read_dta("raw_data/h22sta/H22G_R.dta")
+
+combined_2022 <- df_B %>%
+  left_join(df_C, by = c("HHID", "PN")) %>%
+  left_join(df_G, by = c("HHID", "PN")) 
+```
+
+```{r variable-keeping}
+vars_to_keep <- c(
+  "HHID", "PN", # ID vars
+  "SC001", #self-rated physical health
+  "SC150", # depression last 12 mo
+  "SB000", # life satisfaction
+  "SG086", # volunteered past 12 mo
+  "SG195", "SG196", "SG197" # volunteer hours
+)
+
+outcomes_2022 <- combined_2022 %>%
+  select(all_of(vars_to_keep))
+
+```
+
+# life satisfaction:
+- Yes: 1, No: 0, other: NA
+
+# tot hrs vol work 100
+- less than 100: 1, about 100: 2, more than 100: 3, other: NA
+
+# tot hrs vol work 200
+- less than 200: 1, about 200: 2, more than 200: 3, other: NA
+
+# tot hrs vol work 50
+- less than 50: 1, about 50: 2, more than 50: 3, other: NA
+
+# rate health
+- anything not 1-5: NA, anything 1-5: keep as is
+
+# felt depressed in past yr
+- yes: 1, no: 2, anti-depressants: 3, other: NA
+
+
+```{r cleaning-vars}
+outcomes_2022_clean <- outcomes_2022 %>%
+  mutate(
+    
+    # life satisfaction (SB000)
+    life_satisfaction = case_when(
+      SB000 == 1 ~ 5,
+      SB000 == 2 ~ 4,
+      SB000 == 3 ~ 3,
+      SB000 == 4 ~ 2,
+      SB000 == 5 ~ 1,
+      TRUE ~ NA_real_ # other/missing
+    ),
+    
+    # volunteer work - binary
+    volunteer_bin = case_when(
+      SG086 == 1 ~ 1,
+      SG086 == 5 ~ 0,
+      TRUE ~ NA_real_ # other/ missing
+    ),
+    
+    # total hrs vol 100
+    volunteer_100 = case_when(
+      SG195 == 1 ~ 1, # less than 100 hrs
+      SG195 == 3 ~ 2, # about 100 hrs
+      SG195 == 5 ~ 3, # more than 100 hrs
+      TRUE ~ 0 # none
+    ),
+    
+    # total hrs vol 200
+    volunteer_200 = case_when(
+      SG196 == 1 ~ 1,
+      SG196 == 3 ~ 2,
+      SG196 == 5 ~ 3,
+      TRUE ~ 0 # none
+    ),
+    
+    # total hrs vol 50
+    volunteer_50 = case_when(
+      SG197 == 1 ~ 1,
+      SG197 == 3 ~ 2,
+      SG197 == 5 ~ 3,
+      TRUE ~ 0 # none
+    ),
+    
+    # rate health
+    health_rating = case_when(
+      SC001 == 1 ~ 5, # excellent
+      SC001 == 2 ~ 4,
+      SC001 == 3 ~ 3,
+      SC001 == 4 ~ 2,
+      SC001 == 5 ~ 1, # poor
+      TRUE ~ NA_real_ # other/missing
+    ),
+    
+    # felt depressed in past 12 mo
+    depressed_past_yr = case_when(
+      SC150 == 1 ~ 1,
+      SC150 == 5 ~ 0,
+      SC150 == 3 ~ 2, # on meds
+      TRUE ~ NA_real_ # other/ missing
+    )
+    
+  ) %>%
+  select(PN, HHID, life_satisfaction, volunteer_bin, volunteer_100, volunteer_200, volunteer_50, health_rating, depressed_past_yr)
+
+
+```
+
+```{r NA-counts}
+colSums(is.na(outcomes_2022_clean))
+```
+
+```{r cleaning-NA}
+outcomes_2022_final <- outcomes_2022_clean %>%
+  filter(
+    !is.na(volunteer_bin),
+    !is.na(life_satisfaction),
+    !is.na(health_rating),
+    !is.na(depressed_past_yr)
+  )
+```
+
+```{r csv-export}
+write.csv(outcomes_2022_final, "clean_data/outcomes_2022_final.csv", row.names = FALSE)
+```
