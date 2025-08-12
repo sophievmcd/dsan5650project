@@ -3129,7 +3129,7 @@ vertical-align: -.125em;
 </section>
 <section id="methodology" class="level3">
 <h3 class="anchored" data-anchor-id="methodology">Methodology</h3>
-<p>We used the HRS datasets for the years 2020 and 2022. From these data sets, we pulled variables for our targets, predictors, and covariates for propensity scoring. We chose three variables to represent target categories related to physical health, mental health, and overall life satisfaction, two variables representing predictors of volunteering, and 18 variables on a variety of themes to include in the propensity scores. Each of these are listed below.</p>
+<p>We used the HRS datasets for the years 2020 and 2022. From these data sets, we pulled variables for our targets, predictors, and covariates for propensity scoring. We chose three variables to represent target categories related to physical health, mental health, and overall life satisfaction, two variables representing predictors of volunteering, and 12 variables on a variety of themes to include in the propensity scores. Each of the original datapoints we pulled to use as covariates are listed in the table below. Unfortunately, many of these covariates had high proportions of NA values, and to preserve our ability to model the data we dropped any covariates that had greater than 50% NA values. This left us with four covariates: heart condition, depression, alzheimers, and employment status. While this heavily reduced some of the areas we wanted to focus on like mobility, ability to drive, race, and weak immune system, we still are able to use features representing measures of physical health, mental health, and socialization.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 24%">
@@ -3280,6 +3280,13 @@ vertical-align: -.125em;
 </tr>
 </tbody>
 </table>
+</section>
+<section id="limitations-and-future-considerations" class="level3">
+<h3 class="anchored" data-anchor-id="limitations-and-future-considerations">Limitations and Future Considerations</h3>
+<p>As mentioned above, one of the most limiting factors of our research was the high percentage of NA values in many of the covariates that we originally wanted to include in our propensity scores. Future research into the topic could do a more exhaustive assessment of the hundreds of questions in the dataset to identify as many possible covariates with a sufficient amount of data to model.</p>
+</section>
+<section id="references" class="level2 unnumbered">
+
 
 </section>
 </section>

@@ -1,20 +1,20 @@
 ---
 title: "Pinpointing Causality Between Lifestyle Behaviors and Health: Benefits of Volunteering in Old Age"
 author: "Danielle Fischer and Sophie McDowall"
-format:
-    html:
-        embed-resources: true
+date: "August 12, 2025"
+format: pdf
 bibliography: references.bib
 ---
 
 
-# Abstract
+## Abstract
 
-The University of Michigan Health and Retirement Study is a longitudinal study surveying around 20,000 Americans to build a database for analyzing questions related to challenges and opportunities of aging. Many studies use this database to analyze the effects of different lifestyle practices on various measures of health (@article1, @article2). Causal relationships can be difficult to identify when related to lifestyle practices and health benefits because of the difficulty of isolating variables and controlling for outcomes. Our research seeks to address this challenge by assessing existing work on the effects of volunteering on the health of aging populations including analysis on mental and physical health. We plan to improve on existing research by identifying gaps in causational analysis and potential methods for further assessment of causality between lifestyle practices and health outcomes, focusing on errors related to selection bias, lack of baseline controls, and limited models. 
-Building on prior findings that link volunteering to reduced depression, slower decline in self-rated health, and lower mortality, we aim to evaluate whether these associations hold once important confounders are accounted for. Observational studies in this space are often limited by self-selection into volunteering, which creates systematic differences between groups that can bias results. By identifying and adjusting for these differences, we aim to clarify whether volunteering itself produces meaningful health benefits or if the associations reported in past research primarily reflect pre-existing advantages among volunteers. 
-Our project will use the extensive data in HRS to examine these relationships, focusing on outcomes such as mental health, physical functioning, and reported well being. We hope that by using an extensive set of covariates, we will be able to account for different factors and hidden influences that influence both volunteering and health outcomes. 
+To better understand how certain activities can contribute to positive life outcomes in older adults, the University of Michigan has directed a longitudinal study surveying around 20,000 Americans, building a database for analyzing questions related to challenges and opportunities in aging. One area of interest is the potential benefits of social volunteering for older adults. Our paper seeks to answer the question of whether volunteering can cause positive changes in physical, mental, and emotional health. We assess existing literature, much of which stops at identifying correlational relationships between postive health outcomes and volunteering. Our research seeks to continue on toward identification of causal relationships through the use of propensity scoring on pre-existing covariates to balance our analysis and determine more directly the impacts of volunteering on different health outcomes. 
 
-# Literature Review/Background
+## Introduction
+As people age and reach retirement, they often consider how they can best maintain their physical health, mental health, and overall life satisfaction. Understanding and paying attention to the activities that can decrease risks for serious illnesses, especially those that more significantly impact those in later life, is important to maintaining quality of life in a society. The University of Michigan Health and Retirement Study (HRS) is a longitudinal study surveying around 20,000 Americans to build a database for analyzing questions related to challenges and opportunities of aging. Many studies use this database to analyze the effects of different lifestyle practices on various measures of health (@article1, @article2). Causal relationships can be difficult to identify when related to lifestyle practices and health benefits because of the difficulty of isolating variables and controlling for outcomes. Our research seeks to address this challenge by assessing existing work on the effects of volunteering on the health of aging populations including analysis on mental and physical health. We plan to improve on existing research by identifying gaps in causational analysis and potential methods for further assessment of causality between lifestyle practices and health outcomes, focusing on errors related to selection bias, lack of baseline controls, and limited models. Building on prior findings that link volunteering to reduced depression, slower decline in self-rated health, and lower mortality, we aim to evaluate whether these associations hold once important confounders are accounted for. Observational studies in this space are often limited by self-selection into volunteering, which creates systematic differences between groups that can bias results. By identifying and adjusting for these differences, we aim to clarify whether volunteering itself produces meaningful health benefits or if the associations reported in past research primarily reflect pre-existing advantages among volunteers. Our project will use the extensive data in HRS to examine these relationships, focusing on outcomes such as mental health, physical functioning, and reported well being. We hope that by using an extensive set of covariates, we will be able to account for different factors and hidden influences that influence both volunteering and health outcomes. 
+
+## Literature Review/Background
 
 We use the Health and Retirement Study dataset for our analysis. The HRS (Health and Retirement Study) is sponsored by the National Institute on Aging (grant number NIA U01AG009740) and is conducted by the University of Michigan(@articledataset). This dataset provides longitudinal data on around 20,000 Americans including data on health, mobility, demographic, values, and more. Numerous analytical studies use this data to identify correlations between different life practices and health outcomes, including many specifically looking at the impact of social volunteering on health for older adults. Many of these reports highlight correlations between social volunteering and physical and mental health.
 
@@ -29,7 +29,7 @@ We use the Health and Retirement Study dataset for our analysis. The HRS (Health
 Many of these studies do a good job of addressing various potential co-variates through the use of propensity scores and other methods. Some do not use the most effective approaches to control such variables and therefore cannot identify strong causal relationships beyond correlations.
 
 
-# Missing Pieces (Causality)
+## Missing Pieces: Causality
 
 While many of these studies find that older adults who volunteer report better mental health and overall wellbeing in various health categories, the research is primarily correlational. Some studies do identify and account for potential co-variates, but there is still a space for greater research that moves from the correlational observations of consistent trends and identifies causational patterns between volunteering and various health benefits in old age. 
 
@@ -37,47 +37,64 @@ While volunteering itself may cause better health for various reasons, it is nec
 
 Although a handful of studies have begun using propensity score matching to address selection bias, these approaches often remain limited. Many rely on a limited set of covariates or focus only on a narrow set of outcomes such as mortality or physical health biomarkers. We hope to build on these efforts by examining the results across several health outcomes and subgroups, allowing us to better understand the possible health benefits of volunteering in old age. 
 
-# Course Topic to Fill the gap
+## Closing The Gap
 
 In order to address this gap, our research aims to use propensity score weighting to achieve stronger results that move beyond correlation toward causation. By leveraging this approach on longitudinal HRS data, we aim to better account for baseline differences between volunteers and non-volunteers and reduce bias caused by self-selection. We will also explore subgroup-specific effects to understand how benefits may vary across populations.
 
 Potential areas to address: 
 
-- similar underlying health conditions: do people with similar chronic or burdensome health conditions demonstrate differences in these or other conditions when volunteering compared to others with the same conditions? ex mobility 
-- socio-economic status: does the outcome hold when balanced across socio-economic groups?
-- intensity of volunteering: are effects stronger for individuals who volunteer more frequently compared to occassional volunteers, after controlling for confounders?
-- differences by age group: are causal effects different for different age ranges of older adults, after adjusting for covariates like functional limitations?
+- Similar underlying health conditions: do people with similar chronic or burdensome health conditions demonstrate differences in these or other conditions when volunteering compared to others with the same conditions? ex mobility 
+- Socio-economic status: does the outcome hold when balanced across socio-economic groups?
+- Intensity of volunteering: are effects stronger for individuals who volunteer more frequently compared to occassional volunteers, after controlling for confounders?
+- Differences by age group: are causal effects different for different age ranges of older adults, after adjusting for covariates like functional limitations?
 
-### Data Organization
+## Methodology
+### Data Organization and Cleaning
 
 The HRS data contains tens of thousands of data points on a wide range of areas related to values, personal history, family status, health, mobility, and more in alphabetically labeled groups. The tables below lists covariates that we account for, the corresponding dataset from the survey, and some variables that fit into the category.
 
-### Methodology
+We used the HRS datasets for the years 2020 and 2022. From these data sets, we pulled variables for our targets, predictors, and covariates for propensity scoring. We chose three variables to represent target categories related to physical health, mental health, and overall life satisfaction, two variables representing predictors of volunteering, and 12 variables on a variety of themes to include in the propensity scores. Each of the original datapoints we pulled to use as covariates are listed in the table below. Unfortunately, many of these covariates had high proportions of NA values, and to preserve our ability to model the data we dropped any covariates that had greater than 50% NA values. This left us with four covariates: heart condition, depression, alzheimers, and employment status. While this heavily reduced some of the areas we wanted to focus on like mobility, ability to drive, race, and weak immune system, we still are able to use features representing measures of physical health, mental health, and socialization. Our final variables used are bolded in the table below. We cleaned each of these datasets to normalize for discrepancies in NA values, removed and unified labels, and combined our different data categories to perform our analysis. We used data on the covariates from 2020 alongside data for the predictors and outcomes in 2022 to identify the impact of existing conditions on later outcomes related to volunteer work.
 
-We used the HRS datasets for the years 2020 and 2022. From these data sets, we pulled variables for our targets, predictors, and covariates for propensity scoring. We chose three variables to represent target categories related to physical health, mental health, and overall life satisfaction, two variables representing predictors of volunteering, and 18 variables on a variety of themes to include in the propensity scores. Each of these are listed below. 
+
+: List of Variables Drawn from HRS Dataset (***Final Selected Variables***)
 
 |**Variable**| **Category** | **Dataset Label** | **Description** |
 |------------|----------|---------------|-------------|
-|physical health|Target|SC001|from 2022; self-assessed physical health rating on a scale of 1-10|
-|mental health |Target|SC150|from 2022; the last 12 months have you felt depressed for more than 2 weeks at a time|
-|life satisfaction|Target|SB000|from 2022; self-assessed current life satisfaction rating|
-|volunteered (general)|Predictor|SG086|from 2022; volunteered in past 12 months|
-|volunteered (hours)|Predictor|SG195-197|from 2022; below/around/over 100 hours|
-|age|Covariate|RA019|age in years|
+|***physical health***|Target|SC001|from 2022; self-assessed physical health rating on a scale of 1-10|
+|***mental health*** |Target|SC150|from 2022; the last 12 months have you felt depressed for more than 2 weeks at a time|
+|***life satisfaction***|Target|SB000|from 2022; self-assessed current life satisfaction rating|
+|***volunteered (general)***|Predictor|SG086|from 2022; volunteered in past 12 months|
+|***volunteered (hours)***|Predictor|SG195-197|from 2022; below/around/over 100 hours|
 |race|Covariate|SB091M|primary race|
-|employment|Covariate|SJ005M1|current job status, employed vs. unemployed|
+|***employment***|Covariate|SJ005M1|current job status, employed vs. unemployed|
 |education|Covariate|SB014|highest level of education received|
-|physical: weight|Covariate|SC139|weight|
-|physical: heart condition|Covariate|SC036|yes/no has had heart condition|
+|***physical: heart condition***|Covariate|SC036|yes/no has had heart condition|
 |physical: pain|Covariate|SC106|pain limits activities|
-|physical: depression history|Covariate|SC271|ever had depression|
+|***physical: depression history***|Covariate|SC271|ever had depression|
 |physical: arthritis|Covariate|SC070|arthritis|
-|physical: weak immune system|Covariate|SC297|weak immune system|
-|physical: alzheimers|Covariate|SC272|ever had alzheimers|
+|***physical: alzheimers***|Covariate|SC272|ever had alzheimers|
 |physical: hearing|Covariate|SV401|difficulty hearing|
 |physical: seeing|Covariate|SV402|difficulty seeing|
-|physical: memory|Covariate|RD101|self assessed memory level|
 |mobility: driving|Covariate|SG037|ability to drive|
 |mobility: walking|Covariate|SV404|difficulty walking|
-|social: relationships|Covariate|SV215|relationships with others|
+
+
+### Modeling Approach
+Once we had cleaned, unified, and combined our data, we used propensity scores based on the 2020 covariates to account for potential self-selection into or out of volunteering.
+
+EXPLAIN THE PROPENSITY SCORING, WHAT WE DID
+
+
+## Results
+From our modeling, we found XXXXXX.
+
+
+## Limitations and Future Considerations
+As mentioned above, one of the most limiting factors of our research was the high percentage of NA values in many of the covariates that we originally wanted to include in our propensity scores. Future research into the topic could do a more exhaustive assessment of the hundreds of questions in the dataset to identify as many possible covariates with a sufficient amount of data to model. Although we were unable to perform this level of analysis due to time constraints, this could potentially inform more effective propensity metrics by incorporating additional covariates for the target areas for potential self-selection to volunteer work such as wealth, financial stability, social isolation or connection, physical mobility, and additional physical and mental health factors. 
+
+## Conclusion
+Through this research project, we learned the value of applying propensity scoring methods to fill gaps in existing research. By understanding the potential contributing factors to an outcome and controlling for these factors, researchers can better understand direct outcomes from various activities and relationships between different lifestyle decisions. This type of research can be applied across social science in many different areas of focus, and the goal of moving toward understanding causal relationships beyond just correlation can potentially help people make smarter life choices that they can trust are connected to better physical health, mental health, and life satisfaction. 
+
+
+## References
 
