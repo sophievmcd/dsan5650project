@@ -1,0 +1,299 @@
+---
+title: "modeling-df"
+format: html
+---
+
+```{r imports}
+library(dplyr)
+library(readr)
+library(WeightIt)
+library(cobalt)
+library(broom)
+library(purrr)
+library(stringr)
+library(tidyr)
+```
+
+```{r loading-data}
+
+covs_2020 <- read_csv("clean_data/covariates_2020_final.csv")
+outs_targs_2022 <- read_csv("clean_data/outcomes_2022_final.csv")
+
+merged_df <- full_join(covs_2020, outs_targs_2022, by = c("HHID", "PN"))
+
+clean_merged <- na.omit(merged_df)
+
+print(dim(clean_merged))
+head(clean_merged)
+
+```
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(broom)
+library(WeightIt)
+library(cobalt)
+
+df <- clean_merged
+
+# recode depression to binary
+df <- df %>%
+  mutate(
+    volunteer_bin = as.integer(volunteer_bin),
+    depressed_bin = case_when(
+      depressed_past_yr %in% c(1, 2) ~ 1L,
+      depressed_past_yr == 0 ~ 0L,
+      TRUE ~ NA_integer_
+    ),
+    employment_status_f = factor(employment_status) 
+  )
+
+# covariates (2020) to use in PS model
+covars <- c("heart_condition","ever_had_depression","alzheimers","employment_status_f")
+
+# naive EDA
+
+df %>%
+  count(volunteer_bin) %>%
+  mutate(pct = round(100 * n / sum(n), 1))
+
+## unadjusted outcome means by treatment
+df %>%
+  group_by(volunteer_bin) %>%
+  summarise(
+    mean_life_sat = mean(life_satisfaction, na.rm = TRUE),
+    mean_health   = mean(health_rating, na.rm = TRUE),
+    prop_depr     = mean(depressed_bin, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+## naive (unadjusted) regressions
+lm(life_satisfaction ~ volunteer_bin, data = df) %>% tidy()
+lm(health_rating     ~ volunteer_bin, data = df) %>% tidy()
+
+glm(depressed_bin ~ volunteer_bin, family = binomial(), data = df) %>%
+  tidy(conf.int = TRUE) %>%
+  mutate(OR = exp(estimate), OR.low = exp(conf.low), OR.high = exp(conf.high))
+
+# which covariates differ between groups
+
+# proportions by volunteer group (higher in group==1 => more common among volunteers)
+tab_bin_props <- df %>%
+  group_by(volunteer_bin) %>%
+  summarise(
+    heart_condition_yes = mean(heart_condition == 1, na.rm = TRUE),
+    ever_had_depression_yes = mean(ever_had_depression == 1, na.rm = TRUE),
+    alzheimers_yes = mean(alzheimers == 1, na.rm = TRUE),
+    .groups = "drop"
+  )
+tab_bin_props
+
+# employment status distribution (counts + within-group %)
+tab_emp <- df %>%
+  count(volunteer_bin, employment_status_f) %>%
+  group_by(volunteer_bin) %>%
+  mutate(pct = n / sum(n)) %>%
+  arrange(volunteer_bin, desc(pct)) %>%
+  ungroup()
+tab_emp
+
+# standardized mean differences 
+smd_prop <- function(p1, p0) {
+  sd_pool <- sqrt((p1*(1-p1) + p0*(1-p0)) / 2)
+  if (is.na(sd_pool) || sd_pool == 0) return(NA_real_)
+  (p1 - p0) / sd_pool
+}
+
+g <- df$volunteer_bin
+
+p_yes <- function(x, g, val) {
+  mean(x[g == val] == 1, na.rm = TRUE)
+}
+
+# binary covariates SMDs
+p0_hc <- p_yes(df$heart_condition,g, 0); p1_hc  <- p_yes(df$heart_condition, g, 1)
+p0_dep <- p_yes(df$ever_had_depression, g, 0); p1_dep <- p_yes(df$ever_had_depression, g, 1)
+p0_alz <- p_yes(df$alzheimers, g, 0); p1_alz <- p_yes(df$alzheimers, g, 1)
+
+smd_bin_tbl <- tibble(
+  var = c("heart_condition_yes","ever_had_depression_yes","alzheimers_yes"),
+  p0 = c(p0_hc, p0_dep, p0_alz),
+  p1 = c(p1_hc, p1_dep, p1_alz)
+) %>%
+  mutate(diff = p1 - p0, smd = mapply(smd_prop, p1, p0))
+
+# employment levels (one-hot each level)
+emp_levels <- levels(df$employment_status_f)
+emp_tbl <- purrr::map_dfr(emp_levels, function(lvl){
+  ind <- as.integer(df$employment_status_f == lvl)  # 0/1 indicator
+  p0 <- mean(ind[g == 0], na.rm = TRUE)
+  p1 <- mean(ind[g == 1], na.rm = TRUE)
+  tibble(var = paste0("employment_status:", lvl),
+         p0 = p0, p1 = p1, diff = p1 - p0, smd = smd_prop(p1, p0))
+})
+
+imbalance_tbl <- bind_rows(smd_bin_tbl, emp_tbl) %>%
+  arrange(desc(abs(smd)))
+imbalance_tbl
+
+# propensity score weighting
+
+d_bin <- df %>% drop_na(all_of(c("volunteer_bin", covars)))
+
+# estimate PS and get IPTW 
+W_bin <- weightit(
+  volunteer_bin ~ heart_condition + ever_had_depression + alzheimers + employment_status_f,
+  data = d_bin,
+  method = "ps",
+  estimand = "ATE",   
+  stabilize = TRUE   
+)
+
+print(summary(W_bin$weights))
+print(range(W_bin$ps, na.rm = TRUE))
+
+wg <- d_bin$volunteer_bin
+ww <- W_bin$weights
+ESS_all <- sum(ww)^2 / sum(ww^2)
+ESS_0   <- sum(ww[wg==0])^2 / sum(ww[wg==0]^2)
+ESS_1   <- sum(ww[wg==1])^2 / sum(ww[wg==1]^2)
+print(c(ESS_all = ESS_all, ESS_0 = ESS_0, ESS_1 = ESS_1))
+
+
+bal <- bal.tab(W_bin, un = TRUE, m.threshold = .10, binary = "std")
+bal
+love.plot(W_bin, binary = "std", abs = TRUE, thresholds = c(m = 0.10))
+
+# weighted outcome models (IPTW)
+lm(life_satisfaction ~ volunteer_bin, data = d_bin, weights = W_bin$weights) %>% tidy()
+lm(health_rating ~ volunteer_bin, data = d_bin, weights = W_bin$weights) %>% tidy()
+
+glm_w <- glm(depressed_bin ~ volunteer_bin,
+             data = d_bin, weights = W_bin$weights, family = quasibinomial())
+tidy(glm_w, conf.int = TRUE) %>%
+  mutate(OR = exp(estimate), OR.low = exp(conf.low), OR.high = exp(conf.high))
+
+# SMDs AFTER weighting (to show balance
+# same SMDs, but using weights within each group
+weighted_prop <- function(ind, grp, w, gval) {
+  i <- which(grp == gval & !is.na(ind) & !is.na(w))
+  if (!length(i)) return(NA_real_)
+  sum(w[i] * ind[i]) / sum(w[i])
+}
+
+wg <- d_bin$volunteer_bin
+ww <- W_bin$weights
+
+# binary covariates (yes=1)
+p0_hc_w <- weighted_prop(as.integer(d_bin$heart_condition == 1), wg, ww, 0)
+p1_hc_w <- weighted_prop(as.integer(d_bin$heart_condition == 1), wg, ww, 1)
+p0_dep_w <- weighted_prop(as.integer(d_bin$ever_had_depression == 1), wg, ww, 0)
+p1_dep_w <- weighted_prop(as.integer(d_bin$ever_had_depression == 1), wg, ww, 1)
+p0_alz_w <- weighted_prop(as.integer(d_bin$alzheimers == 1), wg, ww, 0)
+p1_alz_w <- weighted_prop(as.integer(d_bin$alzheimers == 1), wg, ww, 1)
+
+smd_bin_w <- tibble(
+  var = c("heart_condition_yes","ever_had_depression_yes","alzheimers_yes"),
+  p0 = c(p0_hc_w, p0_dep_w, p0_alz_w),
+  p1 = c(p1_hc_w, p1_dep_w, p1_alz_w)
+) %>%
+  mutate(diff = p1 - p0, smd = mapply(smd_prop, p1, p0))
+
+# employment levels
+emp_w <- purrr::map_dfr(emp_levels, function(lvl){
+  ind <- as.integer(d_bin$employment_status_f == lvl)
+  p0 <- weighted_prop(ind, wg, ww, 0)
+  p1 <- weighted_prop(ind, wg, ww, 1)
+  tibble(var = paste0("employment_status:", lvl),
+         p0 = p0, p1 = p1, diff = p1 - p0, smd = smd_prop(p1, p0))
+})
+
+imbalance_tbl_weighted <- bind_rows(smd_bin_w, emp_w) %>%
+  arrange(desc(abs(smd)))
+imbalance_tbl_weighted
+
+
+```
+
+
+Naive (unadjusted) results:
+- 27.8% volunteered, 72.2% did not
+- life satisfaction (1-5):
+- health rating (1-5):
+- depression (binary, 1 = yes/meds, 0 = no):
+rough probabilities from naive logit
+- non-volunteers around 19.6% depression, volunteers 13.3%
+
+which covariates differ unweighted
+- pripr depression: 26.9% in non volunteers vs 20.4% in volunteers
+- heart condition: 23.9% vs 20.7%
+- alzheimers: extremely rare in both groups, 0.5 vs 0.06
+- employment status: 1 +7.8pp among volunteers
+  - 4 - 7.5 pp among volunteers
+  volunteers look healthier and more advantaged at baseline
+  
+after propensity score weighting (binary)
+- 
+
+
+
+First, we studied whether volunteers in the past 12 months (2022) is associated with (i) life satisfaction (1-5, higher = better), (ii) self-rated physical health (1-5, higher = better), and (iii) depression in the past 12 months (binary). Following our pre-analysis plan, treatments and outcomes are from 2022, and covariates are from 2020 (pre-treatment).
+
+* *Treatment*: volunteer_bin = 1 if SG068 = "yes", 0 if "no"
+* *Outcomes*:
+  - **Life satisfaction**: SB000 recoded so 5 = best
+  - **Health rating**: SC001 recoded so 5 = best
+  - **Depression**: SC150 recoded to 1 = yes if "yes" or "on medication", 0 = no
+* *Covariates (2020)*: health history indicators recoded to 1/2: heart_condition (RC036), ever_had_depression (RC271), alzheimers (RC272), and employment_status (RJ005M1; treated as a factor). Variables with a large amount of missingness were dropped during pre-processing
+
+The final sample includes N=11,415 respondents (non-volunteers n = 8,244, 72.2%; volunteers n = 3,171, 27.8%)
+
+## Exploratory (naive) comparisons
+We begin by describing outcomes by volunteering status in 2022, without any adjustment for baseline differences.
+
+| Group          |     n | % of sample |
+| -------------- | ----: | ----------: |
+| Non-volunteers | 8,244 |       72.2% |
+| Volunteers     | 3,171 |       27.8% |
+
+The following table shows the unadjusted outcomes.
+
+| Outcome (higher = better where applicable) | Non-volunteers | Volunteers | Raw difference |
+| ------------------------------------------ | -------------: | ---------: | -------------: |
+| Life satisfaction (1–5)                    |           3.80 |   **4.02** |      **+0.22** |
+| Self-rated physical health (1–5)           |           2.98 |   **3.43** |      **+0.45** |
+| Depressed in past year (binary)            |          19.6% |  **13.2%** |    **−6.4 pp** |
+
+Naive regressions corroborate these gaps:
+
+
+These are unadjusted differences and likely reflect both causal effects and selection into volunteering. We hypothesized that volunteers may be more healthy by nature, as we assumed healthier people may be more inclined to volunteer. 
+
+## Baseline imbalances (unweighted)
+We next examined covariates that differ between groups (proportions of "yes" for the 1/2-coded health variables; per level proportions for employment). The largest imbalances are:
+* *Ever had depression (2020)*: 26.0% (non-volunteers) vs 20.4% (volunteers); SMD = -0.153
+* *Heart condition (2020)*: 23.9% vs 20.7%; SMD = -0.078
+* *Employment status (2020)*:
+  - Level 1 (working now): 29.7% (non-volunteers) vs 37.5% (volunteers); SMD = +0.165
+  - Level 4 (disabled (unable to work)): 12.1% (non-volunteers) vs 5.6% (volunteers); SMD = -0.259
+
+
+# Propensity Score Weighting and Covariate balance
+
+We estimate propensity scores with a logistic model. Using inverse probability of treatment weights for the average treatment effect, the balance improved a lot. After reweighting, we re-fit the same outcome model using the IPTW. The table below shows the naive estimates versus the ones found here.
+
+| Outcome                      |      Naïve estimate |           IPTW estimate | Interpretation                        |
+| ---------------------------- | ------------------: | ----------------------: | ------------------------------------- |
+| Life satisfaction (1–5; OLS) |              +0.218 |              **+0.181** | Volunteers ≈ **0.18 points** higher.  |
+| Health rating (1–5; OLS)     |              +0.452 |              **+0.360** | Volunteers ≈ **0.36 points** higher.  |
+| Depression (logit; OR)       | 0.626 (0.557–0.703) | **0.722 (0.654–0.798)** | ≈ **28% lower odds** after weighting. |
+
+
+# Interpretation of Results
+
+Across three outcomes, volunteering is associated with better well-being. The magnitude of the association decreases after balancing 2020 covariates, which is consistent with the idea that volunteers are positively selected, but it still remains meaningful.
+  * A ~0.18 to 0.36 increase on 1-5 scales for life satisfaction and health
+  * ~28% lower odds of depression
+  
+These results are consistent with a beneficial effect of volunteering. However, there were very many limitations to our study. It is possible that other covariates that we were unable to account for due to lack of presence in the data or a large amount of missingness would have changed the outcomes here, but from what we were able to capture it does appear that volunteering has beneficial effects on life.  
