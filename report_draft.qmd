@@ -95,9 +95,9 @@ We had two main findings:
 
 First, when running the linear regression with and without the propensity scores, we found that the model including propensity scores performed better across all metrics. 
 
-![Baseline vs. Adjusted Model Metric Comparison](data_cleaning/outputs/model_comparison_metrics.png){@figure-comp}
+![Baseline vs. Adjusted Model Metric Comparison](data_cleaning/outputs/model_comparison_metrics.png){#fig:comp}
 
-Here, the baseline model represents the initial model run only on the volunteering categories and the adjusted model represents the model including propensity scores. As shown in @figure-comp, the R² score is higher for the adjusted model, meaning that it explains more of the outcome variance. The adjusted model also has a lower AIC which means it was able to fit the data better. Finally, the MSE for the adjusted model is slightly lower than the baseline, indicating greater accuracy in predicting outcomes.
+Here, the baseline model represents the initial model run only on the volunteering categories and the adjusted model represents the model including propensity scores. As shown in Figure 1, the R² score is higher for the adjusted model, meaning that it explains more of the outcome variance. The adjusted model also has a lower AIC which means it was able to fit the data better. Finally, the MSE for the adjusted model is slightly lower than the baseline, indicating greater accuracy in predicting outcomes.
 
 ## Limitations and Future Considerations
 As mentioned above, one of the most limiting factors of our research was the high percentage of NA values in many of the covariates that we originally wanted to include in our propensity scores. Future research into the topic could do a more exhaustive assessment of the hundreds of questions in the dataset to identify as many possible covariates with a sufficient amount of data to model. Although we were unable to perform this level of analysis due to time constraints, this could potentially inform more effective propensity metrics by incorporating additional covariates for the target areas for potential self-selection to volunteer work such as wealth, financial stability, social isolation or connection, physical mobility, and additional physical and mental health factors. 
