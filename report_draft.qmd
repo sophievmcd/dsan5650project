@@ -2,7 +2,9 @@
 title: "Pinpointing Causality Between Lifestyle Behaviors and Health: Benefits of Volunteering in Old Age"
 author: "Danielle Fischer and Sophie McDowall"
 date: "August 12, 2025"
-format: pdf
+format: 
+    html:
+        embed-resources: true
 bibliography: references.bib
 ---
 
@@ -84,8 +86,6 @@ Once we had cleaned, unified, and combined our data, we used propensity scores b
 
 We first used linear regression to predict our three target variables based solely on the different volunteering categories. Then, we calculated propensity weights based on our chosen covariates and ran the model again.
 
-Then we did xxx danny stuff
-
 
 ## Results
 We had two main findings: 
@@ -155,6 +155,7 @@ We estimate propensity scores with a logistic model. Using inverse probability o
 #### Interpretation of Results
 
 Across three outcomes, volunteering is associated with better well-being. The magnitude of the association decreases after balancing 2020 covariates, which is consistent with the idea that volunteers are positively selected, but it still remains meaningful.
+
   * A ~0.18 to 0.36 increase on 1-5 scales for life satisfaction and health
   * ~28% lower odds of depression
   
