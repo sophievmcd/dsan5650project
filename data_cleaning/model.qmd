@@ -6,6 +6,7 @@ format:
         embed-resources: true
 ---
 
+Note: code support from ChatGPT
 
 ## Load Data
 2020-covariates
@@ -16,6 +17,7 @@ Load, join, drop na values.
 ```{python}
 import pandas as pd
 import numpy as np
+import statsmodels.api as sm
 
 #load in data
 covs_2020 = pd.read_csv("../clean_data/covariates_2020_final.csv")
@@ -25,9 +27,168 @@ outs_2022 = pd.read_csv("../clean_data/outcomes_2022_final.csv")
 merged_df = covs_2020.merge(outs_2022, on=["HHID", "PN"], how="outer")
 
 #drop na values
-clean_df = merged_df.dropna()
+no_na_df = merged_df.dropna()
+
+# merge ids
+clean_df['id'] = no_na_df['HHID'].astype(str) + "_" + clean_df['PN'].astype(str)
+
+```
+
+
+## Baseline Models
+```{python}
+# Define predictors and outcomes
+volunteer_cols = ['volunteer_bin', 'volunteer_100', 'volunteer_200', 'volunteer_50']
+outcomes = ['life_satisfaction', 'health_rating', 'depressed_past_yr']
+
+# Fit baseline models
+baseline_results = {}
+for outcome in outcomes:
+    X = clean_df[volunteer_cols]
+    X = sm.add_constant(X)  # intercept
+    y = clean_df[outcome]
+    model = sm.OLS(y, X).fit()
+    baseline_results[outcome] = model
+
+```
+
+
+Propensity Score
+```{python}
+
+from sklearn.linear_model import LogisticRegression
+
+# Binary "any volunteering" indicator for propensity
+clean_df['any_volunteer'] = (clean_df[volunteer_cols].sum(axis=1) > 0).astype(int)
+
+# Covariates for propensity score
+ps_covs = ['heart_condition', 'ever_had_depression', 'alzheimers', 'employment_status']
+
+# Estimate propensity scores
+logit = LogisticRegression(max_iter=1000)
+logit.fit(clean_df[ps_covs], clean_df['any_volunteer'])
+clean_df['propensity_score'] = logit.predict_proba(clean_df[ps_covs])[:, 1]
+
+# Adjusted models
+adjusted_results = {}
+for outcome in outcomes:
+    X = clean_df[volunteer_cols + ['propensity_score']]
+    X = sm.add_constant(X)
+    y = clean_df[outcome]
+    model = sm.OLS(y, X).fit()
+    adjusted_results[outcome] = model
+
+
+
+```
+
+visuals
+```{python}
+import matplotlib.pyplot as plt
+
+comparison_data = []
+for outcome in outcomes:
+    base_coefs = baseline_results[outcome].params[volunteer_cols]
+    adj_coefs = adjusted_results[outcome].params[volunteer_cols]
+    for var in volunteer_cols:
+        comparison_data.append({
+            'Outcome': outcome,
+            'Variable': var,
+            'Baseline': base_coefs[var],
+            'Adjusted': adj_coefs[var]
+        })
+
+comp_df = pd.DataFrame(comparison_data)
+
+# Plot
+fig, axes = plt.subplots(1, len(outcomes), figsize=(15, 5), sharey=True)
+for i, outcome in enumerate(outcomes):
+    subset = comp_df[comp_df['Outcome'] == outcome]
+    axes[i].plot(subset['Variable'], subset['Baseline'], 'o-', label='Baseline')
+    axes[i].plot(subset['Variable'], subset['Adjusted'], 'o-', label='With Propensity')
+    axes[i].set_title(outcome)
+    axes[i].set_xticklabels(subset['Variable'], rotation=45)
+    axes[i].legend()
+
+plt.tight_layout()
+plt.show()
+
+
+
 
 ```
 
 
 
+metrics
+```{python}
+print("Baseline R²:", baseline_results['life_satisfaction'].rsquared)
+print("Adjusted R²:", adjusted_results['life_satisfaction'].rsquared)
+
+print("Baseline AIC:", baseline_results['life_satisfaction'].aic)
+print("Adjusted AIC:", adjusted_results['life_satisfaction'].aic)
+
+```
+
+
+test and train
+```{python}
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+
+X_base = clean_df[volunteer_cols]
+X_adj = clean_df[volunteer_cols + ['propensity_score']]
+y = clean_df['life_satisfaction']
+
+X_train, X_test, y_train, y_test = train_test_split(X_base, y, test_size=0.2, random_state=1)
+X_train_adj, X_test_adj, _, _ = train_test_split(X_adj, y, test_size=0.2, random_state=1)
+
+# Fit baseline
+model_base = sm.OLS(y_train, sm.add_constant(X_train)).fit()
+pred_base = model_base.predict(sm.add_constant(X_test))
+
+# Fit adjusted
+model_adj = sm.OLS(y_train, sm.add_constant(X_train_adj)).fit()
+pred_adj = model_adj.predict(sm.add_constant(X_test_adj))
+
+print("Baseline MSE:", mean_squared_error(y_test, pred_base))
+print("Adjusted MSE:", mean_squared_error(y_test, pred_adj))
+
+
+```
+
+Visualize metrics
+```{python}
+
+metrics = ['R²', 'AIC', 'MSE']
+baseline_vals = [0.0139, 28217.68, 0.6914]
+adjusted_vals = [0.0392, 27923.64, 0.6696]
+
+fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+
+for i, metric in enumerate(metrics):
+    ax = axes[i]
+    vals = [baseline_vals[i], adjusted_vals[i]]
+    ax.bar(['Baseline', 'Adjusted'], vals, color=['#baefbaff', '#FFA07A'])
+    ax.set_title(metric)
+    
+    # Add some space above bars so labels fit
+    ymax = max(vals) * 1.1 if max(vals) > 1 else max(vals) + 0.05
+    ax.set_ylim(0, ymax)
+    
+    for j, val in enumerate(vals):
+        # For R² (small values), fixed offset; else 2% offset
+        if metric == 'R²':
+            offset = 0.005  # fixed offset for small values
+        else:
+            offset = val * 0.02
+        
+        ax.text(j, val + offset, f'{val:.4f}', ha='center', va='bottom', fontsize=10)
+
+plt.suptitle('Model Comparison Metrics', fontweight='bold', fontsize=18)
+plt.tight_layout(rect=[0, 0, 1, 0.95])
+
+plt.savefig('outputs/model_comparison_metrics.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+```
