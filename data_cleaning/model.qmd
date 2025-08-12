@@ -1,0 +1,33 @@
+---
+title: "Workflow"
+author: "Sophie McDowall and Danielle Fischer"
+format:
+    html:
+        embed-resources: true
+---
+
+
+## Load Data
+2020-covariates
+2022-outcomes/predictors
+
+Load, join, drop na values.
+
+```{python}
+import pandas as pd
+import numpy as np
+
+#load in data
+covs_2020 = pd.read_csv("../clean_data/covariates_2020_final.csv")
+outs_2022 = pd.read_csv("../clean_data/outcomes_2022_final.csv")
+
+#merge on PN and HHID
+merged_df = covs_2020.merge(outs_2022, on=["HHID", "PN"], how="outer")
+
+#drop na values
+clean_df = merged_df.dropna()
+
+```
+
+
+
