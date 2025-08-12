@@ -38,7 +38,7 @@ Target Variables:
 
 Main Predictors: 
 - volunteered in past 12 months (SG086)
-- volunteered 0 hours(SG195) - 196, 197 are 200 and 50
+- volunteered under around or over 100 hours(SG195) - 196, 197 are 200 and 50
 
 Propensity Score Based on:
 - wealth/socio-economic: 
@@ -84,7 +84,7 @@ b_df = data_h20b[["HHID", "PN", "RB091M", "RB014"]]
 # C: SC139, SC036, SC106, SC271, SC070, SC297, SC272
 c_df = data_h20c[["HHID", "PN", "RC036", "RC106", "RC271", "RC070", "RC272"]] # "RC297" excluded for now
 
-# G: SG037
+# G: SG037, RG086, SG195
 g_df = data_h20G[["HHID", "PN", "RG037"]] 
 
 # J: SJ005M1
@@ -162,11 +162,26 @@ print(merged_df['RV404'].value_counts(dropna=False))
 
 ```
 
+
+To drop variables 
+```{python}
+merged_final = merged_df
+merged_final = merged_final.drop('RB091M', axis=1)
+merged_final = merged_final.drop('RB014', axis=1)
+merged_final = merged_final.drop('RC106', axis=1)
+merged_final = merged_final.drop('RC070', axis=1)
+merged_final = merged_final.drop('RG037', axis=1)
+merged_final = merged_final.drop('RV402', axis=1)
+merged_final = merged_final.drop('RV401', axis=1)
+merged_final = merged_final.drop('RV404', axis=1)
+
+```
+
+
 Export to csv
 ```{python}
 
-merged_df.to_csv("../clean_data/covariates_2020_final.csv", index=False)
-
+merged_final.to_csv("../clean_data/covariates_2020_final.csv", index=False)
 
 ```
 
