@@ -162,8 +162,7 @@ print(merged_df['RV404'].value_counts(dropna=False))
 
 ```
 
-
-To drop variables 
+To drop variables - over 50% NAN
 ```{python}
 merged_final = merged_df
 merged_final = merged_final.drop('RB091M', axis=1)
@@ -174,6 +173,17 @@ merged_final = merged_final.drop('RG037', axis=1)
 merged_final = merged_final.drop('RV402', axis=1)
 merged_final = merged_final.drop('RV401', axis=1)
 merged_final = merged_final.drop('RV404', axis=1)
+
+```
+
+Rename columns
+```{python}
+merged_rename = merged_final.rename(columns={
+    'RC036': 'heart_condition',
+    'RC271': 'ever_had_depression',
+    'RC272': 'alzheimers',
+    'RJ005M1': 'employment_status'
+})
 
 ```
 

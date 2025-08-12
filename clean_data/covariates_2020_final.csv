@@ -1,4 +1,4 @@
-HHID,PN,RC036,RC271,RC272,RJ005M1
+HHID,PN,heart_condition,ever_had_depression,alzheimers,employment_status
 010003,030,2.0,1.0,1.0,6.0
 010004,040,2.0,2.0,2.0,5.0
 010013,040,2.0,2.0,2.0,5.0
